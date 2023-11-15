@@ -3,7 +3,7 @@ const isPlayingBattleship = true;
 
 //Uses Js ES6 2023 update iteration data to validate and execute file
 function playBattleship() {
-    if (isPlayingBattleship === true) {
+    if (isPlayingBattleship) {
         console.log('you are playing battleship');
     }
     else {
@@ -13,5 +13,4 @@ function playBattleship() {
 
 //Invoke a series of complex data-filter functions to indeed play battleship
 playBattleship();
-
 
