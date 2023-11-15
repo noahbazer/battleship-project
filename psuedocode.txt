@@ -1,0 +1,43 @@
+headspace for part two:
+
+Changes that need to be made:
+-Ships need to have multiple points as defined by their length
+-Ships must be randomly placed horizontally or vertically
+-Ships must now be tracked to account for sink information
+-Ships may not intersect or be out of bounds
+
+-Player may now enter a board size, variables already set with infinite (buggy) scalability
+
+LOGIC:
+
+Initialize the board using two variables, one for columns and one for rows. use gameBoard object and push "false" values to column arrays, creates grid like:
+
+       1      2      3      4      5      6
+(A) [false, false, false, false, false, false]
+(B) [false, false, false, false, false, false]
+(C) [false, false, false, false, false, false]
+
+Initialize the ships by using an array (shipLengths) that indicates the length of the ships (e.g. [2, 3, 3, 4, 5])
+
+SHIP CREATION AND PLACEMENT:
+
+use a double-nested for loop to iterate through the ship lengths array and create a ship for each one. Ship creation is as follows:
+Use a float random number generator with the columns and rows variables to pick numbers between 1 and (maxcolumns / maxrows) and pick a starting spot
+Use a random boolean generator (math.random() < 0.5) to generate a true or false value. True is vertical placement, false is horizontal.
+text to see if initial spot is taken or invalid. Test spots increasing in row if vertical or increasing in column if horizontal ([1, 1 + 1] OR [1 + 1, 1])
+if test for initial spot or ANY incremented spots fail test, restart the random number generator and boolean generator. 
+
+if all tests pass for all spots, create a new ship object and push to the 'ships' array, with 'identifier', 'alive', and 'locations' keys.
+
+
+GAME LOOP:
+
+Same loop as part one, except with a few exceptions to hit detection and sink handling.
+
+take the user input and check if its valid and unused (if already used mark as miss with context). If so, loop through all ships locations to find a matching value. If matches, filter the locations array of the ship object it came from to omit the inputted value, set the locations value as the filtered array, and check the length of the spots array afterwards.
+If the length === 0, display as ship sunk, set ship alive value to false, and check to see if all ships are sunk. If so, run the game loop end and ask to restart/ If not, Set location to null and restart to ask for user input
+If the length !== 0, display as ship hit, set input to null
+
+Add input to 'used' array, restart logic
+
+
