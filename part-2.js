@@ -5,7 +5,7 @@ const boardCols = 9;
 const boardRows = 9;
 const totalShips = 5;
 let boardShips = [];
-let remainingShips = 0;
+let remainingShips = 5;
 const shipLengths = [2, 3, 3, 4, 5]
 
 //Initialize board using arrays for columns, pushing values of false to indicate each column + row combination
@@ -43,10 +43,9 @@ const placeShips = (board) => {
         let validPlacement = true;
 
         for (let u = 0; u < tempLocs.length; u++) {
-          if (
-            tempLocs[u][0] >= boardCols ||
-            tempLocs[u][1] >= boardRows ||
-            board[tempLocs[u][1]][tempLocs[u][0]]
+          if (tempLocs[u][0] >= boardCols 
+            || tempLocs[u][1] >= boardRows 
+            || board[tempLocs[u][1]][tempLocs[u][0]]
           ) {
             validPlacement = false;
             tempLocs = [];
@@ -60,34 +59,35 @@ const placeShips = (board) => {
             ships++;
           tempLocs = [];
           isVertical = Math.floor(Math.random() > 0.5); 
-          console.table(boardShips);
         }
-
   }
 };
 
 //Main game logic
 const startGame = () => {
-  console.log('Press any key to start the game.');
-  readlineSync.keyInPause();
-
   let board = initializeBoard();
   placeShips(board);
+  console.log('Board Complete, Ships Placed')
   remainingShips = totalShips;
+  console.log('Parameters Set')
+  return board;
+  }
 
   const isValidInput = function(input) {
-    if (input.length === 2 && input.charCodeAt(0) - 65 < boardRows && input.charCodeAt(1) >= boardCols) {
+    let isValid = false;
+    if (input.length === 2 
+      && input.charCodeAt(0) - 65 < boardCols
+      && input[1] < boardRows) {
         isValid = true;
     }
-  }
+    return isValid;
+  } 
 
-  }
+  console.log('Before input query');
+  let board = startGame();
+  while (remainingShips > 0) {
 
-  while (remainingShips > 0 && (!isValid)) {
-    let userGuess;
-    let isValid = false;
-
-    userGuess = readlineSync.question('Enter a location to strike (e.g. A2): ').toUpperCase();
+    let userGuess = readlineSync.question('Enter a location to strike (e.g. A2): ').toUpperCase();
     isValid = isValidInput(userGuess);
 
     if (!isValid) {
@@ -101,6 +101,7 @@ const startGame = () => {
     if (board[row][col]) {
       console.log('Hit!');
       let hitShip = boardShips.find(ship => ship.locations.some(location => location[0] === row && location[1] === col));
+      console.log(hitShip);
       hitShip.locations = hitShip.locations.filter(location => location[0] !== row || location[1] !== col);
       if (hitShip.locations.length === 0) {
         console.log('Ship sunk!');
