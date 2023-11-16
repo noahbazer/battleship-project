@@ -91,8 +91,11 @@ const startGame = () => {
 
     let userGuess = readlineSync.question('Enter a location to strike (e.g. A2): ').toUpperCase();
     isValid = isValidInput(userGuess);
-
-    if (!isValid) {
+    
+    if (userGuess.toUpperCase() === 'SHIPS') {
+      console.log(chalk.cyanBright(`There are ${remainingShips} ships remaining.`))
+    }
+    else if (!isValid) {
         console.log(chalk.redBright('Invalid input!'))
     }
     else {
