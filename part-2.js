@@ -25,47 +25,48 @@ const initializeBoard = () => {
 const placeShips = (board) => {
   let ships = 0;
   while (ships < totalShips) {
+    //Initializes variables on every run
     let tempLocs = [];
     let col = Math.floor(Math.random() * boardCols);
     let row = Math.floor(Math.random() * boardRows);
-    let isVertical = Math.floor(Math.random() > 0.5);
+    let isVertical = Math.floor(Math.random() < 0.5);
 
-    //Builds the ship "upwards" if positive, "right" if negative
-    for (let l = 0; l < shipLengths.length; l++) {
-      for (let p = 0; p < shipLengths[l]; p++) {
-        console.log(l);
+      //Sets location 
+      for (let p = 0; p < shipLengths[ships]; p++) {
         if (isVertical) {
           tempLocs.push([col, row + p])
         }
         else {
           tempLocs.push([col + p, row])
-        }  
-      }
-    //Checks to see if all generated locations are valid
-    let validPlacement = true;
+        }
 
-    for (let i = 0; i < tempLocs.length; i++) {
-      if (
-        tempLocs[i][0] >= boardCols ||
-        tempLocs[i][1] >= boardRows ||
-        board[tempLocs[i][1]][tempLocs[i][0]]
-      ) {
-        validPlacement = false;
-      }
-    }
+        let validPlacement = true;
 
-    //Pushes ship to array if all locations are valid
-    if (validPlacement) {
-      for (let i = 0; i < tempLocs.length; i++) {
-        board[tempLocs[i][1]][tempLocs[i][0]] = true;
-        boardShips.push({ id: i, locations: tempLocs});
+        for (let i = 0; i < tempLocs.length; i++) {
+          if (
+            tempLocs[i][0] >= boardCols ||
+            tempLocs[i][1] >= boardRows ||
+            board[tempLocs[i][1]][tempLocs[i][0]]
+          ) {
+            validPlacement = false;
+            tempLocs = [];
+            break;
+          }
+        }
+    
+        //Pushes ship to array if all locations are valid
+        if (validPlacement) {
+          for (let i = 0; i < tempLocs.length; i++) {
+            board[tempLocs[i][1]][tempLocs[i][0]] = true;
+            boardShips.push({ id: ships + 1, locations: tempLocs});
+          }
+          ships++;
+          tempLocs = [];
+          isVertical = Math.floor(Math.random() > 0.5); 
+          console.table(boardShips);
+        }
       }
-      ships++;
-      tempLocs = [];
-      isVertical = Math.floor(Math.random() > 0.5);
-    }
   }
-}
 };
 
 //Main game logic
