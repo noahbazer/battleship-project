@@ -93,7 +93,7 @@ const startGame = () => {
     isValid = isValidInput(userGuess);
 
     if (!isValid) {
-        console.log('Invalid input!')
+        console.log(chalk.redBright('Invalid input!'))
     }
     else {
     let col = userGuess.charCodeAt(0) - 65;
@@ -105,11 +105,10 @@ const startGame = () => {
         .some(location => location[0] === col && location[1] === row)
       );
     
-      console.log(hitShip);
       hitShip.locations = hitShip.locations.filter((location => location[0] !== col || location[1] !== row));
-      console.log(hitShip);
       if (hitShip.locations.length === 0) {
-        console.log('Ship sunk!');
+        remainingShips--;
+        console.log(chalk.yellowBright(`Ship sunk! ${remainingShips} ships remaining!`));
       }
     } else if (board[row][col] === false) {
       console.log((`You attack ${userGuess}.`) + (chalk.red(' Miss!')));
