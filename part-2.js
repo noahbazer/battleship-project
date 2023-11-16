@@ -78,8 +78,8 @@ const startGame = () => {
   const isValidInput = function(input) {
     let isValid = false;
     if (input.length === 2 
-      && input.charCodeAt(0) - 65 < boardCols
-      && input.charCodeAt(0) - 65 > 0
+      && input.charCodeAt(0) - 65 < (boardCols)
+      && input.charCodeAt(0) - 65 > -1
       && input[1] < boardRows
       && input[1] > 0) {
         isValid = true;
