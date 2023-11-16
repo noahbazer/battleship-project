@@ -1,4 +1,6 @@
 const readlineSync = require('readline-sync');
+const chalk = require('chalk');
+
 
 //Initialize Variables
 const boardCols = 9;
@@ -96,9 +98,8 @@ const startGame = () => {
     else {
     let col = userGuess.charCodeAt(0) - 65;
     let row = parseInt(userGuess.charAt(1)) - 1;
-    console.log(`You entered ${userGuess}.`, userGuess);
     if (board[row][col]) {
-      console.log('Hit!');
+      console.log((`You attack ${userGuess}.`) + chalk.greenBright(' Hit!'));
       let hitShip = boardShips
         .find(ship => ship.locations
         .some(location => location[0] === col && location[1] === row)
@@ -111,9 +112,9 @@ const startGame = () => {
         console.log('Ship sunk!');
       }
     } else if (board[row][col] === false) {
-      console.log('Miss!');
+      console.log((`You attack ${userGuess}.`) + (chalk.red(' Miss!')));
     } else {
-      console.log('You already picked this location! Miss!');
+      console.log(chalk.red(`You\'ve already attacked ${userGuess}! Miss!`));
     }
     board[row][col] = null;
   }
