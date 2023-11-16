@@ -3,9 +3,10 @@ const readlineSync = require('readline-sync');
 //Initialize Variables
 const boardCols = 3;
 const boardRows = 3;
-const totalShips = 2;
+const totalShips = 5;
 let boardShips = [];
 let remainingShips = 0;
+const shipLengths = [2, 3, 3, 4, 5]
 
 //Initialize board using arrays for columns, pushing values of false to indicate each column + row combination
 const initializeBoard = () => {
@@ -30,12 +31,13 @@ const placeShips = (board) => {
     let isVertical = Math.floor(Math.random() > 0.5);
 
     //Builds the ship "upwards" if positive, "right" if negative
-    if (isVertical) {
-        tempLocs = [[col, row], [col, row + 1],  [col, row + 2], [col, row + 3]]
-    }
-    else {
-        tempLocs = [[col, row], [col + 1, row],  [col + 2, row], [col + 3, row]]
-    }
+    for (let l = 0; l < shipLengths.length; l++) {
+      if (isVertical) {
+        tempLocs.push([col, row + l])
+      }
+      else {
+        tempLocs.push([col + l, row])
+      }
 
     //Checks to see if all generated locations are valid
     let validPlacement = true;
@@ -60,6 +62,7 @@ const placeShips = (board) => {
       ships++;
     }
   }
+}
 };
 
 //Main game logic
