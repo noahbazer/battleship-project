@@ -99,9 +99,14 @@ const startGame = () => {
     console.log(`You entered ${userGuess}.`, userGuess);
     if (board[row][col]) {
       console.log('Hit!');
-      let hitShip = boardShips.find(ship => ship.locations.some(location => location[0] === row && location[1] === col));
+      let hitShip = boardShips
+        .find(ship => ship.locations
+        .some(location => location[0] === col && location[1] === row)
+      );
+    
       console.log(hitShip);
-      hitShip.locations = hitShip.locations.filter(location => location[0] !== row || location[1] !== col);
+      hitShip.locations = hitShip.locations.filter((location => location[0] !== col || location[1] !== row));
+      console.log(hitShip);
       if (hitShip.locations.length === 0) {
         console.log('Ship sunk!');
       }
