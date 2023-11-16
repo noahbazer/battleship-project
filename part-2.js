@@ -80,7 +80,7 @@ const startGame = () => {
     if (input.length === 2 
       && input.charCodeAt(0) - 65 < (boardCols)
       && input.charCodeAt(0) - 65 > -1
-      && input[1] < boardRows
+      && input[1] <= boardRows
       && input[1] > 0) {
         isValid = true;
     }
@@ -101,7 +101,7 @@ const startGame = () => {
         console.log(chalk.redBright('Invalid input!'))
     }
     else {
-    let col = userGuess.charCodeAt(0) - 65;
+    let col = userGuess.charCodeAt(0) - 64;
     let row = parseInt(userGuess.charAt(1)) - 1;
     if (board[row][col]) {
       console.log((`You attack ${userGuess}.`) + chalk.greenBright(' Hit!'));
