@@ -32,13 +32,15 @@ const placeShips = (board) => {
 
     //Builds the ship "upwards" if positive, "right" if negative
     for (let l = 0; l < shipLengths.length; l++) {
-      if (isVertical) {
-        tempLocs.push([col, row + l])
+      for (let p = 0; p < shipLengths[l]; p++) {
+        console.log(l);
+        if (isVertical) {
+          tempLocs.push([col, row + p])
+        }
+        else {
+          tempLocs.push([col + p, row])
+        }  
       }
-      else {
-        tempLocs.push([col + l, row])
-      }
-
     //Checks to see if all generated locations are valid
     let validPlacement = true;
 
@@ -59,6 +61,8 @@ const placeShips = (board) => {
         boardShips.push({ id: i, locations: tempLocs});
       }
       ships++;
+      tempLocs = [];
+      isVertical = Math.floor(Math.random() > 0.5);
     }
   }
 }
