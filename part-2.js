@@ -2,7 +2,7 @@ const readlineSync = require('readline-sync');
 const chalk = require('chalk');
 
 
-//Initialize Variables
+//Initialize meta variables
 const boardCols = 9;
 const boardRows = 9;
 const totalShips = 5;
@@ -23,7 +23,7 @@ const initializeBoard = () => {
   return board;
 };
 
-
+//Set (or reset) ship count and place ships
 const placeShips = (board) => {
   let ships = 0;
   while (ships < totalShips) {
