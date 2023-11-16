@@ -1,8 +1,8 @@
 const readlineSync = require('readline-sync');
 
 //Initialize Variables
-const boardCols = 3;
-const boardRows = 3;
+const boardCols = 9;
+const boardRows = 9;
 const totalShips = 5;
 let boardShips = [];
 let remainingShips = 0;
@@ -58,7 +58,7 @@ const placeShips = (board) => {
       for (let i = 0; i < tempLocs.length; i++) {
         board[tempLocs[i][1]][tempLocs[i][0]] = true;
       }
-      boardShips.push({ alive: true, locations: tempLocs });
+      boardShips.push({ id: i, locations: tempLocs});
       ships++;
     }
   }
@@ -72,7 +72,7 @@ const startGame = () => {
 
   let board = initializeBoard();
   placeShips(board);
-  let remainingShips = totalShips;
+  remainingShips = totalShips;
 
   const isValidInput = function(input) {
     if (input.length === 2 && input.charCodeAt(0) - 65 < boardRows && input.charCodeAt(1) >= boardCols) {

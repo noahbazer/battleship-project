@@ -37,6 +37,7 @@ const startGame = () => {
   let board = initializeBoard();
   placeShips(board);
   let remainingShips = totalShips;
+  console.table(board);
 
   while (remainingShips > 0) {
     let userGuess = readlineSync.question('Enter a location to strike (e.g. A2): ').toUpperCase();
