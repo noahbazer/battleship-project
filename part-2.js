@@ -31,7 +31,7 @@ const placeShips = (board) => {
     let row = Math.floor(Math.random() * boardRows);
     let isVertical = Math.floor(Math.random() < 0.5);
 
-      //Sets location 
+      //Sets location
       for (let p = 0; p < shipLengths[ships]; p++) {
         if (isVertical) {
           tempLocs.push([col, row + p])
@@ -39,33 +39,30 @@ const placeShips = (board) => {
         else {
           tempLocs.push([col + p, row])
         }
-
+      }
         let validPlacement = true;
 
-        for (let i = 0; i < tempLocs.length; i++) {
+        for (let u = 0; u < tempLocs.length; u++) {
           if (
-            tempLocs[i][0] >= boardCols ||
-            tempLocs[i][1] >= boardRows ||
-            board[tempLocs[i][1]][tempLocs[i][0]]
+            tempLocs[u][0] >= boardCols ||
+            tempLocs[u][1] >= boardRows ||
+            board[tempLocs[u][1]][tempLocs[u][0]]
           ) {
             validPlacement = false;
             tempLocs = [];
-            break;
           }
         }
-    
-        //Pushes ship to array if all locations are valid
         if (validPlacement) {
           for (let i = 0; i < tempLocs.length; i++) {
             board[tempLocs[i][1]][tempLocs[i][0]] = true;
-            boardShips.push({ id: ships + 1, locations: tempLocs});
           }
-          ships++;
+            boardShips.push({ id: ships + 1, locations: tempLocs});
+            ships++;
           tempLocs = [];
           isVertical = Math.floor(Math.random() > 0.5); 
           console.table(boardShips);
         }
-      }
+
   }
 };
 
@@ -126,5 +123,4 @@ const startGame = () => {
       }
     }
 };
-
 startGame();
