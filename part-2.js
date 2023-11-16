@@ -33,7 +33,7 @@ const placeShips = (board) => {
     let row = Math.floor(Math.random() * boardRows);
     let isVertical = Math.floor(Math.random() < 0.5);
 
-      //Sets location
+      //Sets location of ships relative to first value
       for (let p = 0; p < shipLengths[ships]; p++) {
         if (isVertical) {
           tempLocs.push([col, row + p])
@@ -122,7 +122,7 @@ const startGame = () => {
   }
 
     if (remainingShips === 0) {
-      let playAgain = readlineSync.keyInYNStrict(chalk.cyanBright('You won! Do you want to play again? (Y/N)'));
+      let playAgain = readlineSync.keyInYNStrict(chalk.cyanBright('You won! Do you want to play again?'));
       if (playAgain) {
         board = initializeBoard();
         placeShips(board);
