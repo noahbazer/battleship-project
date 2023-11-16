@@ -119,7 +119,7 @@ const startGame = () => {
   }
 
     if (remainingShips === 0) {
-      let playAgain = readlineSync.keyInYNStrict('You won! Do you want to play again? (Y/N)');
+      let playAgain = readlineSync.keyInYNStrict(chalk.cyanBright('You won! Do you want to play again? (Y/N)'));
       if (playAgain) {
         board = initializeBoard();
         placeShips(board);
