@@ -93,11 +93,10 @@ const startGame = () => {
     if (!isValid) {
         console.log('Invalid input!')
     }
-    
+    else {
     let col = userGuess.charCodeAt(0) - 65;
     let row = parseInt(userGuess.charAt(1)) - 1;
     console.log(`You entered ${userGuess}.`, userGuess);
-
     if (board[row][col]) {
       console.log('Hit!');
       let hitShip = boardShips.find(ship => ship.locations.some(location => location[0] === row && location[1] === col));
@@ -112,6 +111,7 @@ const startGame = () => {
       console.log('You already picked this location! Miss!');
     }
     board[row][col] = null;
+  }
 
     if (remainingShips === 0) {
       let playAgain = readlineSync.keyInYNStrict('You won! Do you want to play again? (Y/N)');
