@@ -49,7 +49,6 @@ const placeShips = (board) => {
         board[tempLocs[i][1]][tempLocs[i][0]]
       ) {
         validPlacement = false;
-        break;
       }
     }
 
@@ -57,8 +56,8 @@ const placeShips = (board) => {
     if (validPlacement) {
       for (let i = 0; i < tempLocs.length; i++) {
         board[tempLocs[i][1]][tempLocs[i][0]] = true;
+        boardShips.push({ id: i, locations: tempLocs});
       }
-      boardShips.push({ id: i, locations: tempLocs});
       ships++;
     }
   }
@@ -99,7 +98,11 @@ const startGame = () => {
 
     if (board[row][col]) {
       console.log('Hit!');
-      remainingShips--;
+      let hitShip = boardShips.find(ship => ship.locations.some(location => location[0] === row && location[1] === col));
+      hitShip.locations = hitShip.locations.filter(location => location[0] !== row || location[1] !== col);
+      if (hitShip.locations.length === 0) {
+        console.log('Ship sunk!');
+      }
     } else if (board[row][col] === false) {
       console.log('Miss!');
     } else {
