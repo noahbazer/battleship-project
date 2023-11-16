@@ -111,7 +111,12 @@ const startGame = () => {
       hitShip.locations = hitShip.locations.filter((location => location[0] !== col || location[1] !== row));
       if (hitShip.locations.length === 0) {
         remainingShips--;
-        console.log(chalk.yellowBright(`Ship sunk! ${remainingShips} ships remaining!`));
+        if (remainingShips === 1) {
+          console.log(chalk.yellowBright(`Ship sunk! ${remainingShips} ship remaining!`));
+        }
+        else {
+          console.log(chalk.yellowBright(`Ship sunk! ${remainingShips} ships remaining!`));
+        }
       }
     } else if (board[row][col] === false) {
       console.log((`You attack ${userGuess}.`) + (chalk.red(' Miss!')));
