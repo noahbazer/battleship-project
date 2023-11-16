@@ -102,7 +102,7 @@ const startGame = () => {
     }
     else {
     let col = userGuess.charCodeAt(0) - 64;
-    let row = parseInt(userGuess.charAt(1)) - 1;
+    let row = parseInt(userGuess.charAt(1));
     if (board[row][col]) {
       console.log((`You attack ${userGuess}.`) + chalk.greenBright(' Hit!'));
       let hitShip = boardShips
