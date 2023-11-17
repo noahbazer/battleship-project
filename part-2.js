@@ -101,8 +101,8 @@ const startGame = () => {
         console.log(chalk.redBright('Invalid input!'))
     }
     else {
-    let col = userGuess.charCodeAt(0) - 64;
-    let row = parseInt(userGuess.charAt(1));
+    let col = userGuess.charCodeAt(0) - 65;
+    let row = parseInt(userGuess.charAt(1) - 1);
     if (board[row][col]) {
       console.log((`You attack ${userGuess}.`) + chalk.greenBright(' Hit!'));
       let hitShip = boardShips
