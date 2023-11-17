@@ -69,9 +69,7 @@ const placeShips = (board) => {
 const startGame = () => {
   let board = initializeBoard();
   placeShips(board);
-  console.log('Board Complete, Ships Placed')
   remainingShips = totalShips;
-  console.log('Parameters Set')
   return board;
   }
 
