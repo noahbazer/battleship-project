@@ -85,7 +85,6 @@ const startGame = () => {
     return isValid;
   } 
 
-  console.log('Before input query');
   let board = startGame();
   while (remainingShips > 0) {
 
