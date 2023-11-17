@@ -2,7 +2,7 @@ const readlineSync = require('readline-sync');
 const chalk = require('chalk');
 
 
-//Initialize Variables
+//Initialize meta variables
 const boardCols = 9;
 const boardRows = 9;
 const totalShips = 5;
@@ -23,7 +23,7 @@ const initializeBoard = () => {
   return board;
 };
 
-
+//Set (or reset) ship count and place ships
 const placeShips = (board) => {
   let ships = 0;
   while (ships < totalShips) {
@@ -33,7 +33,7 @@ const placeShips = (board) => {
     let row = Math.floor(Math.random() * boardRows);
     let isVertical = Math.floor(Math.random() < 0.5);
 
-      //Sets location
+      //Sets location of ships relative to first value
       for (let p = 0; p < shipLengths[ships]; p++) {
         if (isVertical) {
           tempLocs.push([col, row + p])
@@ -78,8 +78,10 @@ const startGame = () => {
   const isValidInput = function(input) {
     let isValid = false;
     if (input.length === 2 
-      && input.charCodeAt(0) - 65 < boardCols
-      && input[1] < boardRows) {
+      && input.charCodeAt(0) - 65 < (boardCols)
+      && input.charCodeAt(0) - 65 > -1
+      && input[1] <= boardRows
+      && input[1] > 0) {
         isValid = true;
     }
     return isValid;
@@ -99,8 +101,8 @@ const startGame = () => {
         console.log(chalk.redBright('Invalid input!'))
     }
     else {
-    let col = userGuess.charCodeAt(0) - 65;
-    let row = parseInt(userGuess.charAt(1)) - 1;
+    let col = userGuess.charCodeAt(0) - 64;
+    let row = parseInt(userGuess.charAt(1));
     if (board[row][col]) {
       console.log((`You attack ${userGuess}.`) + chalk.greenBright(' Hit!'));
       let hitShip = boardShips
@@ -127,7 +129,7 @@ const startGame = () => {
   }
 
     if (remainingShips === 0) {
-      let playAgain = readlineSync.keyInYNStrict(chalk.cyanBright('You won! Do you want to play again? (Y/N)'));
+      let playAgain = readlineSync.keyInYNStrict(chalk.cyanBright('You won! Do you want to play again?'));
       if (playAgain) {
         board = initializeBoard();
         placeShips(board);
