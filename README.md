@@ -16,5 +16,5 @@ PART 2:
 - Randomized ship placement location and orientation
 - Efficient testing loops keep program lightweight
 - Chalk program color-codes certain actions to make reading through terminal easier
-- "ships" input allowes user to see how many ships are remaining
+- "ships" input allows user to see how many ships are remaining
 - Small continuity cases to keep grammar and interactions consistent and clean
