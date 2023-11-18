@@ -69,9 +69,7 @@ const placeShips = (board) => {
 const startGame = () => {
   let board = initializeBoard();
   placeShips(board);
-  console.log('Board Complete, Ships Placed')
   remainingShips = totalShips;
-  console.log('Parameters Set')
   return board;
   }
 
@@ -101,8 +99,8 @@ const startGame = () => {
         console.log(chalk.redBright('Invalid input!'))
     }
     else {
-    let col = userGuess.charCodeAt(0) - 64;
-    let row = parseInt(userGuess.charAt(1));
+    let col = userGuess.charCodeAt(0) - 65;
+    let row = parseInt(userGuess.charAt(1) - 1);
     if (board[row][col]) {
       console.log((`You attack ${userGuess}.`) + chalk.greenBright(' Hit!'));
       let hitShip = boardShips
@@ -113,7 +111,12 @@ const startGame = () => {
       hitShip.locations = hitShip.locations.filter((location => location[0] !== col || location[1] !== row));
       if (hitShip.locations.length === 0) {
         remainingShips--;
-        console.log(chalk.yellowBright(`Ship sunk! ${remainingShips} ships remaining!`));
+        if (remainingShips === 1) {
+          console.log(chalk.yellowBright(`Ship sunk! ${remainingShips} ship remaining!`));
+        }
+        else {
+          console.log(chalk.yellowBright(`Ship sunk! ${remainingShips} ships remaining!`));
+        }
       }
     } else if (board[row][col] === false) {
       console.log((`You attack ${userGuess}.`) + (chalk.red(' Miss!')));
