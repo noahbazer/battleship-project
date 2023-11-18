@@ -31,19 +31,40 @@ const placeShips = (board) => {
 
 
 const startGame = () => {
-  console.log('Press any key to start the game.');
-  readlineSync.keyInPause();
-
   let board = initializeBoard();
   placeShips(board);
-  let remainingShips = totalShips;
+  console.log('Board Complete, Ships Placed')
+  remainingShips = totalShips;
+  console.log('Parameters Set')
+  return board;
+  }
+
+  const isValidInput = function(input) {
+    let isValid = false;
+    if (input.length === 2 
+      && input.charCodeAt(0) - 65 < (boardCols)
+      && input.charCodeAt(0) - 65 > -1
+      && input[1] <= boardRows
+      && input[1] > 0) {
+        isValid = true;
+    }
+    return isValid;
+  } 
+
+  console.log('Before input query');
+  let board = startGame();
   console.table(board);
-
   while (remainingShips > 0) {
-    let userGuess = readlineSync.question('Enter a location to strike (e.g. A2): ').toUpperCase();
-    let col = userGuess.charCodeAt(0) - 65;
-    let row = parseInt(userGuess.charAt(1)) - 1;
 
+    let userGuess = readlineSync.question('Enter a location to strike (e.g. A2): ').toUpperCase();
+    isValid = isValidInput(userGuess);
+
+    if (!isValid) {
+        console.log('Invalid input!')
+    }
+    else {
+    let col = userGuess.charCodeAt(0) - 65;
+    let row = parseInt(userGuess.charAt(1) - 1);
     if (board[row][col]) {
       console.log('Hit!');
       remainingShips--;
@@ -53,7 +74,7 @@ const startGame = () => {
       console.log('You already picked this location! Miss!');
     }
     board[row][col] = null;
-
+  }
     if (remainingShips === 0) {
       let playAgain = readlineSync.keyInYNStrict('You won! Do you want to play again? (Y/N)');
       if (playAgain) {
@@ -64,7 +85,6 @@ const startGame = () => {
         break;
       }
     }
-  }
-};
+  };
 
 startGame();
