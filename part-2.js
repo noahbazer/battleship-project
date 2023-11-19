@@ -43,7 +43,7 @@ const placeShips = (board) => {
         }
       }
         let validPlacement = true;
-
+        //Checks to see if all ship location spots are valid
         for (let u = 0; u < tempLocs.length; u++) {
           if (tempLocs[u][0] >= boardCols 
             || tempLocs[u][1] >= boardRows 
@@ -53,6 +53,7 @@ const placeShips = (board) => {
             tempLocs = [];
           }
         }
+        //Sets the hit detector for each slot to true and pushes the ship to the active ships array
         if (validPlacement) {
           for (let i = 0; i < tempLocs.length; i++) {
             board[tempLocs[i][1]][tempLocs[i][0]] = true;
@@ -86,17 +87,22 @@ const startGame = () => {
   } 
 
   let board = startGame();
+  console.log('Press any key to start the game.');
+  readlineSync.keyInPause();
   while (remainingShips > 0) {
 
-    let userGuess = readlineSync.question('Enter a location to strike (e.g. A2): ').toUpperCase();
+    let userGuess = readlineSync.question('Enter a location to strike (or \'SHIPS\' to see remaining ships): ').toUpperCase();
     isValid = isValidInput(userGuess);
     
+    //Allows users to see how many ships are remaining
     if (userGuess.toUpperCase() === 'SHIPS') {
       console.log(chalk.cyanBright(`There are ${remainingShips} ships remaining.`))
     }
     else if (!isValid) {
-        console.log(chalk.redBright('Invalid input!'))
+        console.log(chalk.redBright('Invalid input! Try something like \'E4!\''))
     }
+
+    //If valid, sets guess to 2 character numeric string to match array values\
     else {
     let col = userGuess.charCodeAt(0) - 65;
     let row = parseInt(userGuess.charAt(1) - 1);
@@ -107,6 +113,7 @@ const startGame = () => {
         .some(location => location[0] === col && location[1] === row)
       );
     
+      //Removes hit location from ship's array, and checks to see if ship is sunk
       hitShip.locations = hitShip.locations.filter((location => location[0] !== col || location[1] !== row));
       if (hitShip.locations.length === 0) {
         remainingShips--;
@@ -122,6 +129,8 @@ const startGame = () => {
     } else {
       console.log(chalk.red(`You\'ve already attacked ${userGuess}! Miss!`));
     }
+
+    //Used as catch all "else" condition to check repeated inputs
     board[row][col] = null;
   }
 
