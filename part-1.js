@@ -50,7 +50,8 @@ const startGame = () => {
   } 
 
   let board = startGame();
-  console.table(board);
+  console.log('Press any key to start the game.');
+  readlineSync.keyInPause();
   while (remainingShips > 0) {
 
     let userGuess = readlineSync.question('Enter a location to strike (e.g. A2): ').toUpperCase();
@@ -73,7 +74,7 @@ const startGame = () => {
     board[row][col] = null;
   }
     if (remainingShips === 0) {
-      let playAgain = readlineSync.keyInYNStrict('You won! Do you want to play again? (Y/N)');
+      let playAgain = readlineSync.keyInYNStrict('You won! Do you want to play again?');
       if (playAgain) {
         board = initializeBoard();
         placeShips(board);
