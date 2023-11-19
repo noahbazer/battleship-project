@@ -33,9 +33,7 @@ const placeShips = (board) => {
 const startGame = () => {
   let board = initializeBoard();
   placeShips(board);
-  console.log('Board Complete, Ships Placed')
   remainingShips = totalShips;
-  console.log('Parameters Set')
   return board;
   }
 
@@ -51,7 +49,6 @@ const startGame = () => {
     return isValid;
   } 
 
-  console.log('Before input query');
   let board = startGame();
   console.table(board);
   while (remainingShips > 0) {
