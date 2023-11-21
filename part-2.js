@@ -72,7 +72,17 @@ const startGame = () => {
   let board = initializeBoard();
   placeShips(board);
   remainingShips = totalShips;
-  console.log(chalk.yellowBright(`${placeAttempts} Placement attempts,`) + chalk.greenBright(` ${totalShips} passed!`));
+  let consoleAttempts = '';
+  if (placeAttempts < 40) {
+    consoleAttempts = chalk.greenBright(`${placeAttempts} Placement attempts,`);
+  } else if (placeAttempts < 60) {
+    consoleAttempts = chalk.yellowBright(`${placeAttempts} Placement attempts,`);
+  } else {
+    consoleAttempts = chalk.redBright(`${placeAttempts} Placement attempts,`);
+  }
+
+  console.log(consoleAttempts + chalk.greenBright(` ${totalShips} passed!`));
+  placeAttempts = 0;
   return board;
   }
 
