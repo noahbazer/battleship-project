@@ -6,6 +6,7 @@ const chalk = require('chalk');
 const boardCols = 9;
 const boardRows = 9;
 const totalShips = 5;
+let placeAttempts = 0;
 let boardShips = [];
 let remainingShips = 5;
 const shipLengths = [2, 3, 3, 4, 5]
@@ -23,6 +24,7 @@ const initializeBoard = () => {
   return board;
 };
 
+
 //Set (or reset) ship count and place ships
 const placeShips = (board) => {
   let ships = 0;
@@ -33,7 +35,8 @@ const placeShips = (board) => {
     let row = Math.floor(Math.random() * boardRows);
       //Sets location of ships relative to first value
       for (let p = 0; p < shipLengths[ships]; p++) {
-        let isVertical = (Math.random() < 0.5);
+        placeAttempts = placeAttempts + 1;
+        let isVertical = (Math.random() < .5);
         if (isVertical) {
           tempLocs.push([col, row + p])
         }
@@ -69,6 +72,7 @@ const startGame = () => {
   let board = initializeBoard();
   placeShips(board);
   remainingShips = totalShips;
+  console.log(chalk.yellowBright(`${placeAttempts} Placement attempts,`) + chalk.greenBright(` ${totalShips} passed!`));
   return board;
   }
 
