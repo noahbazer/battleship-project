@@ -31,10 +31,9 @@ const placeShips = (board) => {
     let tempLocs = [];
     let col = Math.floor(Math.random() * boardCols);
     let row = Math.floor(Math.random() * boardRows);
-    let isVertical = Math.floor(Math.random() < 0.5);
-
       //Sets location of ships relative to first value
       for (let p = 0; p < shipLengths[ships]; p++) {
+        let isVertical = (Math.random() < 0.5);
         if (isVertical) {
           tempLocs.push([col, row + p])
         }
@@ -61,7 +60,6 @@ const placeShips = (board) => {
             boardShips.push({ id: ships + 1, locations: tempLocs});
             ships++;
           tempLocs = [];
-          isVertical = Math.floor(Math.random() > 0.5); 
         }
   }
 };
