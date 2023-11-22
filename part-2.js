@@ -73,47 +73,20 @@ const placeShips = (board, rows, columns) => {
   }
 };
 
-//Main game logic
-const startGame = () => {
-  let board = initializeBoard(boardRows, boardCols);
-  placeShips(board, boardRows, boardCols);
-  remainingShips = totalShips;
-  let consoleAttempts = '';
-  if (placeAttempts < 40) {
-    consoleAttempts = chalk.greenBright(`${placeAttempts} Placement attempts,`);
-  } else if (placeAttempts < 60) {
-    consoleAttempts = chalk.yellowBright(`${placeAttempts} Placement attempts,`);
-  } else {
-    consoleAttempts = chalk.redBright(`${placeAttempts} Placement attempts,`);
+const isValidInput = function(input) {
+  let isValid = false;
+  if (input.length === 2 
+    && input.charCodeAt(0) - 65 < (boardCols)
+    && input.charCodeAt(0) - 65 > -1
+    && input[1] <= boardRows
+    && input[1] > 0) {
+      isValid = true;
   }
+  return isValid;
+} 
 
-  console.log(consoleAttempts + chalk.greenBright(` ${totalShips} passed!`));
-  placeAttempts = 0;
-  return board;
-  }
-
-  const isValidInput = function(input) {
-    let isValid = false;
-    if (input.length === 2 
-      && input.charCodeAt(0) - 65 < (boardCols)
-      && input.charCodeAt(0) - 65 > -1
-      && input[1] <= boardRows
-      && input[1] > 0) {
-        isValid = true;
-    }
-    return isValid;
-  } 
-
-  let board = startGame();
-  console.log('Press any key to start the game.');
-  readlineSync.keyInPause();
-  while (remainingShips > 0) {
-
-    let userGuess = readlineSync.question('Enter a location to strike (or \'SHIPS\' to see remaining ships): ').toUpperCase();
-    isValid = isValidInput(userGuess);
-    
-    //Allows users to see how many ships are remaining
-    if (userGuess.toUpperCase() === 'SHIPS') {
+const inputHandle = function(userGuess, isValid) {
+  if (userGuess.toUpperCase() === 'SHIPS') {
       console.log(chalk.cyanBright(`There are ${remainingShips} ships remaining.`))
     }
     else if (!isValid) {
@@ -151,6 +124,38 @@ const startGame = () => {
     //Used as catch all "else" condition to check repeated inputs
     board[row][col] = null;
   }
+}
+
+//Main game logic
+const startGame = () => {
+  let board = initializeBoard(boardRows, boardCols);
+  placeShips(board, boardRows, boardCols);
+  remainingShips = totalShips;
+  let consoleAttempts = '';
+  if (placeAttempts < 40) {
+    consoleAttempts = chalk.greenBright(`${placeAttempts} Placement attempts,`);
+  } else if (placeAttempts < 60) {
+    consoleAttempts = chalk.yellowBright(`${placeAttempts} Placement attempts,`);
+  } else {
+    consoleAttempts = chalk.redBright(`${placeAttempts} Placement attempts,`);
+  }
+
+  console.log(consoleAttempts + chalk.greenBright(` ${totalShips} passed!`));
+  placeAttempts = 0;
+  return board;
+  }
+
+
+  let board = startGame();
+  console.log('Press any key to start the game.');
+  readlineSync.keyInPause();
+  while (remainingShips > 0) {
+
+    let userGuess = readlineSync.question('Enter a location to strike (or \'SHIPS\' to see remaining ships): ').toUpperCase();
+    isValid = isValidInput(userGuess);
+    
+    //Allows users to see how many ships are remaining
+    inputHandle(userGuess, isValid);
 
     if (remainingShips === 0) {
       let playAgain = readlineSync.keyInYNStrict(chalk.cyanBright('You won! Do you want to play again?'));
