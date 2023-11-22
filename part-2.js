@@ -40,7 +40,6 @@ const placeShips = (board, rows, columns) => {
     let isVertical = (Math.random() < .5);
       //Sets location of ships relative to first value
       for (let p = 0; p < shipLengths[ships]; p++) {
-
         placeAttempts = placeAttempts + 1;
         if (isVertical) {
           tempLocs.push([col, row + p])
@@ -85,6 +84,26 @@ const isValidInput = function(input) {
   return isValid;
 } 
 
+const findHit = function(row, col, userGuess) {
+  console.log((`You attack ${userGuess}.`) + chalk.greenBright(' Hit!'));
+  let hitShip = boardShips
+    .find(ship => ship.locations
+    .some(location => location[0] === col && location[1] === row)
+  );
+
+  //Removes hit location from ship's array, and checks to see if ship is sunk
+  hitShip.locations = hitShip.locations.filter((location => location[0] !== col || location[1] !== row));
+  if (hitShip.locations.length === 0) {
+    remainingShips--;
+    if (remainingShips === 1) {
+      console.log(chalk.yellowBright(`Ship sunk! ${remainingShips} ship remaining!`));
+    }
+    else {
+      console.log(chalk.yellowBright(`Ship sunk! ${remainingShips} ships remaining!`));
+    }
+  }
+}
+
 const inputHandle = function(userGuess, isValid) {
   if (userGuess.toUpperCase() === 'SHIPS') {
       console.log(chalk.cyanBright(`There are ${remainingShips} ships remaining.`))
@@ -98,23 +117,7 @@ const inputHandle = function(userGuess, isValid) {
     let col = userGuess.charCodeAt(0) - 65;
     let row = parseInt(userGuess.charAt(1) - 1);
     if (board[row][col]) {
-      console.log((`You attack ${userGuess}.`) + chalk.greenBright(' Hit!'));
-      let hitShip = boardShips
-        .find(ship => ship.locations
-        .some(location => location[0] === col && location[1] === row)
-      );
-    
-      //Removes hit location from ship's array, and checks to see if ship is sunk
-      hitShip.locations = hitShip.locations.filter((location => location[0] !== col || location[1] !== row));
-      if (hitShip.locations.length === 0) {
-        remainingShips--;
-        if (remainingShips === 1) {
-          console.log(chalk.yellowBright(`Ship sunk! ${remainingShips} ship remaining!`));
-        }
-        else {
-          console.log(chalk.yellowBright(`Ship sunk! ${remainingShips} ships remaining!`));
-        }
-      }
+      findHit(row, col, userGuess);
     } else if (board[row][col] === false) {
       console.log((`You attack ${userGuess}.`) + (chalk.red(' Miss!')));
     } else {
