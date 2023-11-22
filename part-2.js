@@ -2,6 +2,10 @@ const readlineSync = require('readline-sync');
 const chalk = require('chalk');
 
 
+// Hey Andrei! It appears that in my haste to add a bunch of QoL features, I botched my ship placement code by moving my
+// vertical Boolean generator INSIDE of my ships' length generator, so it would re-run the generator on every iteration,
+// causing breaks in the ships' locations. Sorry about that!
+
 //Initialize meta variables
 const boardCols = 9;
 const boardRows = 9;
@@ -12,11 +16,11 @@ let remainingShips = 5;
 const shipLengths = [2, 3, 3, 4, 5]
 
 //Initialize board using arrays for columns, pushing values of false to indicate each column + row combination
-const initializeBoard = () => {
+const initializeBoard = (rows, columns) => {
   let board = [];
-  for (let i = 0; i < boardRows; i++) {
+  for (let i = 0; i < rows; i++) {
     let row = [];
-    for (let j = 0; j < boardCols; j++) {
+    for (let j = 0; j < columns; j++) {
       row.push(false);
     }
     board.push(row);
@@ -26,17 +30,18 @@ const initializeBoard = () => {
 
 
 //Set (or reset) ship count and place ships
-const placeShips = (board) => {
+const placeShips = (board, rows, columns) => {
   let ships = 0;
   while (ships < totalShips) {
     //Initializes variables on every run
     let tempLocs = [];
-    let col = Math.floor(Math.random() * boardCols);
-    let row = Math.floor(Math.random() * boardRows);
+    let col = Math.floor(Math.random() * columns);
+    let row = Math.floor(Math.random() * rows);
+    let isVertical = (Math.random() < .5);
       //Sets location of ships relative to first value
       for (let p = 0; p < shipLengths[ships]; p++) {
+
         placeAttempts = placeAttempts + 1;
-        let isVertical = (Math.random() < .5);
         if (isVertical) {
           tempLocs.push([col, row + p])
         }
@@ -64,13 +69,14 @@ const placeShips = (board) => {
             ships++;
           tempLocs = [];
         }
+        console.log(boardShips.map((item) => item.locations));
   }
 };
 
 //Main game logic
 const startGame = () => {
-  let board = initializeBoard();
-  placeShips(board);
+  let board = initializeBoard(boardRows, boardCols);
+  placeShips(board, boardRows, boardCols);
   remainingShips = totalShips;
   let consoleAttempts = '';
   if (placeAttempts < 40) {
