@@ -11,6 +11,7 @@ const boardCols = 9;
 const boardRows = 9;
 const totalShips = 5;
 let placeAttempts = 0;
+let ships = 0;
 let boardShips = [];
 let remainingShips = 5;
 const shipLengths = [2, 3, 3, 4, 5]
@@ -28,11 +29,34 @@ const initializeBoard = (rows, columns) => {
   return board;
 };
 
+const checkLocs = function(board, tempLocs) {
+  let validPlacement = true;
+  //Checks to see if all ship location spots are valid
+  for (let u = 0; u < tempLocs.length; u++) {
+    if (tempLocs[u][0] >= boardCols 
+      || tempLocs[u][1] >= boardRows 
+      || board[tempLocs[u][1]][tempLocs[u][0]]
+    ) {
+      validPlacement = false;
+      tempLocs = [];
+    }
+  }
+  //Sets the hit detector for each slot to true and pushes the ship to the active ships array
+  if (validPlacement) {
+    for (let i = 0; i < tempLocs.length; i++) {
+      board[tempLocs[i][1]][tempLocs[i][0]] = true;
+    }
+      boardShips.push({ id: ships + 1, locations: tempLocs});
+      ships++;
+    tempLocs = [];
+  }
+}
+
 
 //Set (or reset) ship count and place ships
 const placeShips = (board, rows, columns) => {
-  let ships = 0;
   while (ships < totalShips) {
+    placeAttempts = placeAttempts + 1;
     //Initializes variables on every run
     let tempLocs = [];
     let col = Math.floor(Math.random() * columns);
@@ -40,7 +64,6 @@ const placeShips = (board, rows, columns) => {
     let isVertical = (Math.random() < .5);
       //Sets location of ships relative to first value
       for (let p = 0; p < shipLengths[ships]; p++) {
-        placeAttempts = placeAttempts + 1;
         if (isVertical) {
           tempLocs.push([col, row + p])
         }
@@ -48,27 +71,7 @@ const placeShips = (board, rows, columns) => {
           tempLocs.push([col + p, row])
         }
       }
-        let validPlacement = true;
-        //Checks to see if all ship location spots are valid
-        for (let u = 0; u < tempLocs.length; u++) {
-          if (tempLocs[u][0] >= boardCols 
-            || tempLocs[u][1] >= boardRows 
-            || board[tempLocs[u][1]][tempLocs[u][0]]
-          ) {
-            validPlacement = false;
-            tempLocs = [];
-          }
-        }
-        //Sets the hit detector for each slot to true and pushes the ship to the active ships array
-        if (validPlacement) {
-          for (let i = 0; i < tempLocs.length; i++) {
-            board[tempLocs[i][1]][tempLocs[i][0]] = true;
-          }
-            boardShips.push({ id: ships + 1, locations: tempLocs});
-            ships++;
-          tempLocs = [];
-        }
-        console.log(boardShips.map((item) => item.locations));
+      checkLocs(board, tempLocs);
   }
 };
 
@@ -134,6 +137,8 @@ const startGame = () => {
   let board = initializeBoard(boardRows, boardCols);
   placeShips(board, boardRows, boardCols);
   remainingShips = totalShips;
+  //console.table(board);
+  //console.log(boardShips.map((ship) => ship.locations));
   let consoleAttempts = '';
   if (placeAttempts < 40) {
     consoleAttempts = chalk.greenBright(`${placeAttempts} Placement attempts,`);
