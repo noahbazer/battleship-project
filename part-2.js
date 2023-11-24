@@ -11,7 +11,6 @@ const boardCols = 9;
 const boardRows = 9;
 const totalShips = 5;
 let placeAttempts = 0;
-let ships = 0;
 let boardShips = [];
 let remainingShips = 5;
 const shipLengths = [2, 3, 3, 4, 5]
@@ -29,34 +28,11 @@ const initializeBoard = (rows, columns) => {
   return board;
 };
 
-const checkLocs = function(board, tempLocs) {
-  let validPlacement = true;
-  //Checks to see if all ship location spots are valid
-  for (let u = 0; u < tempLocs.length; u++) {
-    if (tempLocs[u][0] >= boardCols 
-      || tempLocs[u][1] >= boardRows 
-      || board[tempLocs[u][1]][tempLocs[u][0]]
-    ) {
-      validPlacement = false;
-      tempLocs = [];
-    }
-  }
-  //Sets the hit detector for each slot to true and pushes the ship to the active ships array
-  if (validPlacement) {
-    for (let i = 0; i < tempLocs.length; i++) {
-      board[tempLocs[i][1]][tempLocs[i][0]] = true;
-    }
-      boardShips.push({ id: ships + 1, locations: tempLocs});
-      ships++;
-    tempLocs = [];
-  }
-}
-
 
 //Set (or reset) ship count and place ships
 const placeShips = (board, rows, columns) => {
+  let ships = 0;
   while (ships < totalShips) {
-    placeAttempts = placeAttempts + 1;
     //Initializes variables on every run
     let tempLocs = [];
     let col = Math.floor(Math.random() * columns);
@@ -71,7 +47,27 @@ const placeShips = (board, rows, columns) => {
           tempLocs.push([col + p, row])
         }
       }
-      checkLocs(board, tempLocs);
+        let validPlacement = true;
+        //Checks to see if all ship location spots are valid
+        for (let u = 0; u < tempLocs.length; u++) {
+          if (tempLocs[u][0] >= boardCols 
+            || tempLocs[u][1] >= boardRows 
+            || board[tempLocs[u][1]][tempLocs[u][0]]
+          ) {
+            validPlacement = false;
+            tempLocs = [];
+          }
+        }
+        //Sets the hit detector for each slot to true and pushes the ship to the active ships array
+        if (validPlacement) {
+          for (let i = 0; i < tempLocs.length; i++) {
+            board[tempLocs[i][1]][tempLocs[i][0]] = true;
+          }
+            boardShips.push({ id: ships + 1, locations: tempLocs});
+            ships++;
+            placeAttempts++;
+          tempLocs = [];
+        }
   }
 };
 
@@ -132,13 +128,7 @@ const inputHandle = function(userGuess, isValid) {
   }
 }
 
-//Main game logic
-const startGame = () => {
-  let board = initializeBoard(boardRows, boardCols);
-  placeShips(board, boardRows, boardCols);
-  remainingShips = totalShips;
-  //console.table(board);
-  //console.log(boardShips.map((ship) => ship.locations));
+const logAttempts = function() {
   let consoleAttempts = '';
   if (placeAttempts < 40) {
     consoleAttempts = chalk.greenBright(`${placeAttempts} Placement attempts,`);
@@ -147,14 +137,22 @@ const startGame = () => {
   } else {
     consoleAttempts = chalk.redBright(`${placeAttempts} Placement attempts,`);
   }
-
   console.log(consoleAttempts + chalk.greenBright(` ${totalShips} passed!`));
   placeAttempts = 0;
+}
+
+//Main game logic
+const startGame = () => {
+  let board = initializeBoard(boardRows, boardCols);
+  placeShips(board, boardRows, boardCols);
+  remainingShips = totalShips;
+  let consoleAttempts = '';
   return board;
   }
 
-
   let board = startGame();
+  console.log(boardShips.map((item) => item.locations));
+  logAttempts();
   console.log('Press any key to start the game.');
   readlineSync.keyInPause();
   while (remainingShips > 0) {
