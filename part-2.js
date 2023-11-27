@@ -10,13 +10,14 @@ let boardSize = 10;
 const totalShips = 5;
 let placeAttempts = 0;
 let ships = 0;
+let board = [];
 let boardShips = [];
 let remainingShips = 5;
 const shipLengths = [2, 3, 3, 4, 5];
 
 //Initialize board using arrays for columns, pushing values of false to indicate each column + row combination
 const initializeBoard = (boardSize) => {
-  let board = [];
+  board = [];
   for (let i = 0; i < boardSize; i++) {
     let row = [];
     for (let j = 0; j < boardSize; j++) {
@@ -169,14 +170,14 @@ const logAttempts = function () {
 
 //Main game logic
 const startGame = (boardSize) => {
-  let board = initializeBoard(boardSize);
+  board = initializeBoard(boardSize);
   placeShips(board, boardSize);
   remainingShips = totalShips;
   let consoleAttempts = "";
   return board;
 };
 
-let board = startGame(boardSize);
+board = startGame(boardSize);
 console.table(board);
 console.log(boardShips.map((item) => item.locations));
 logAttempts();
@@ -200,9 +201,13 @@ while (remainingShips > 0) {
       chalk.cyanBright("You won! Do you want to play again?")
     );
     if (playAgain) {
-      board = initializeBoard();
-      placeShips(board);
+      boardShips = [];
+      board = initializeBoard(boardSize);
+      placeShips(board, boardSize);
       remainingShips = totalShips;
+      console.table(board);
+      console.log(boardShips.map((item) => item.locations));
+      logAttempts();
     } else {
       break;
     }
