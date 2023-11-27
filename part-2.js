@@ -12,7 +12,7 @@ let placeAttempts = 0;
 let ships = 0;
 let board = [];
 let boardShips = [];
-let remainingShips = 5;
+let remainingShips = totalShips;
 const shipLengths = [2, 3, 3, 4, 5];
 
 //Initialize board using arrays for columns, pushing values of false to indicate each column + row combination
