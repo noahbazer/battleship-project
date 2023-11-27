@@ -10,6 +10,7 @@ const chalk = require('chalk');
 let boardSize = 10;
 const totalShips = 5;
 let placeAttempts = 0;
+let ships = 0;
 let boardShips = [];
 let remainingShips = 5;
 const shipLengths = [2, 3, 3, 4, 5]
@@ -27,10 +28,37 @@ const initializeBoard = (boardSize) => {
   return board;
 };
 
+const pushShipToArray = function(board, tempLocs) {
+    for (let i = 0; i < tempLocs.length; i++) {
+      board[tempLocs[i][1]][tempLocs[i][0]] = true;
+    }
+      boardShips.push({ id: ships + 1, locations: tempLocs});
+      ships++;
+      placeAttempts++;
+    tempLocs = [];
+}
+
+//Checks to see if all ship location spots are valid
+const validateLocations = function(board, tempLocs) {
+  let validPlacement = true;
+  for (let u = 0; u < tempLocs.length; u++) {
+    if (tempLocs[u][0] >= boardSize 
+      || tempLocs[u][1] >= boardSize 
+      || board[tempLocs[u][1]][tempLocs[u][0]]
+    ) {
+      validPlacement = false;
+      tempLocs = [];
+    }
+  }
+  if (validPlacement) {
+    pushShipToArray(board, tempLocs);
+  }
+}
+
 
 //Set (or reset) ship count and place ships
 const placeShips = (board, boardSize) => {
-  let ships = 0;
+  ships = 0;
   while (ships < totalShips) {
     //Initializes variables on every run
     let tempLocs = [];
@@ -46,27 +74,7 @@ const placeShips = (board, boardSize) => {
           tempLocs.push([col + p, row])
         }
       }
-        let validPlacement = true;
-        //Checks to see if all ship location spots are valid
-        for (let u = 0; u < tempLocs.length; u++) {
-          if (tempLocs[u][0] >= boardSize 
-            || tempLocs[u][1] >= boardSize 
-            || board[tempLocs[u][1]][tempLocs[u][0]]
-          ) {
-            validPlacement = false;
-            tempLocs = [];
-          }
-        }
-        //Sets the hit detector for each slot to true and pushes the ship to the active ships array
-        if (validPlacement) {
-          for (let i = 0; i < tempLocs.length; i++) {
-            board[tempLocs[i][1]][tempLocs[i][0]] = true;
-          }
-            boardShips.push({ id: ships + 1, locations: tempLocs});
-            ships++;
-            placeAttempts++;
-          tempLocs = [];
-        }
+    validateLocations(board, tempLocs, ships);
   }
 };
 
@@ -76,13 +84,19 @@ const isValidInput = function(input, boardSize) {
     && input.charCodeAt(0) - 65 < (boardSize)
     && input.charCodeAt(0) - 65 > -1
     && input[1] <= boardSize
-    && input[1] > 0) {
+    && input[1] > 0
+    ||
+    input.length === 3
+    && input.charCodeAt(0) - 65 < (boardSize)
+    && input[1] === '1'
+    && input[2] === '0'
+    ) {
       isValid = true;
   }
   return isValid;
 } 
 
-const findHit = function(row, col, userGuess) {
+const handleHit = function(row, col, userGuess) {
   console.log((`You attack ${userGuess}.`) + chalk.greenBright(' Hit!'));
   let hitShip = boardShips
     .find(ship => ship.locations
@@ -110,12 +124,19 @@ const inputHandle = function(userGuess, isValid) {
         console.log(chalk.redBright('Invalid input! Try something like \'E4!\''))
     }
 
-    //If valid, sets guess to 2 character numeric string to match array values\
+    //If valid, sets guess to 2/3 character numeric string to match array values\
     else {
     let col = userGuess.charCodeAt(0) - 65;
-    let row = parseInt(userGuess.charAt(1) - 1);
+    let row = 0;
+    if (userGuess.length === 3 && boardSize >= 10) {
+      row = 9;
+    }
+    else {
+      row = parseInt(userGuess.charAt(1) - 1);
+    };
+
     if (board[row][col]) {
-      findHit(row, col, userGuess);
+      handleHit(row, col, userGuess);
     } else if (board[row][col] === false) {
       console.log((`You attack ${userGuess}.`) + (chalk.red(' Miss!')));
     } else {
@@ -150,12 +171,12 @@ const startGame = (boardSize) => {
   }
 
   let board = startGame(boardSize);
+  console.table(board);
   console.log(boardShips.map((item) => item.locations));
   logAttempts();
   console.log('Press any key to start the game.');
   readlineSync.keyInPause();
   while (remainingShips > 0) {
-
     let userGuess = readlineSync.question('Enter a location to strike (or \'SHIPS\' to see remaining ships): ').toUpperCase();
     isValid = isValidInput(userGuess, boardSize);
     
