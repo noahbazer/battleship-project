@@ -7,8 +7,7 @@ const chalk = require('chalk');
 // causing breaks in the ships' locations. Sorry about that!
 
 //Initialize meta variables
-const boardCols = 9;
-const boardRows = 9;
+let boardSize = 10;
 const totalShips = 5;
 let placeAttempts = 0;
 let boardShips = [];
@@ -16,11 +15,11 @@ let remainingShips = 5;
 const shipLengths = [2, 3, 3, 4, 5]
 
 //Initialize board using arrays for columns, pushing values of false to indicate each column + row combination
-const initializeBoard = (rows, columns) => {
+const initializeBoard = (boardSize) => {
   let board = [];
-  for (let i = 0; i < rows; i++) {
+  for (let i = 0; i < boardSize; i++) {
     let row = [];
-    for (let j = 0; j < columns; j++) {
+    for (let j = 0; j < boardSize; j++) {
       row.push(false);
     }
     board.push(row);
@@ -30,13 +29,13 @@ const initializeBoard = (rows, columns) => {
 
 
 //Set (or reset) ship count and place ships
-const placeShips = (board, rows, columns) => {
+const placeShips = (board, boardSize) => {
   let ships = 0;
   while (ships < totalShips) {
     //Initializes variables on every run
     let tempLocs = [];
-    let col = Math.floor(Math.random() * columns);
-    let row = Math.floor(Math.random() * rows);
+    let col = Math.floor(Math.random() * boardSize);
+    let row = Math.floor(Math.random() * boardSize);
     let isVertical = (Math.random() < .5);
       //Sets location of ships relative to first value
       for (let p = 0; p < shipLengths[ships]; p++) {
@@ -50,8 +49,8 @@ const placeShips = (board, rows, columns) => {
         let validPlacement = true;
         //Checks to see if all ship location spots are valid
         for (let u = 0; u < tempLocs.length; u++) {
-          if (tempLocs[u][0] >= boardCols 
-            || tempLocs[u][1] >= boardRows 
+          if (tempLocs[u][0] >= boardSize 
+            || tempLocs[u][1] >= boardSize 
             || board[tempLocs[u][1]][tempLocs[u][0]]
           ) {
             validPlacement = false;
@@ -71,12 +70,12 @@ const placeShips = (board, rows, columns) => {
   }
 };
 
-const isValidInput = function(input) {
+const isValidInput = function(input, boardSize) {
   let isValid = false;
   if (input.length === 2 
-    && input.charCodeAt(0) - 65 < (boardCols)
+    && input.charCodeAt(0) - 65 < (boardSize)
     && input.charCodeAt(0) - 65 > -1
-    && input[1] <= boardRows
+    && input[1] <= boardSize
     && input[1] > 0) {
       isValid = true;
   }
@@ -142,15 +141,15 @@ const logAttempts = function() {
 }
 
 //Main game logic
-const startGame = () => {
-  let board = initializeBoard(boardRows, boardCols);
-  placeShips(board, boardRows, boardCols);
+const startGame = (boardSize) => {
+  let board = initializeBoard(boardSize);
+  placeShips(board, boardSize);
   remainingShips = totalShips;
   let consoleAttempts = '';
   return board;
   }
 
-  let board = startGame();
+  let board = startGame(boardSize);
   console.log(boardShips.map((item) => item.locations));
   logAttempts();
   console.log('Press any key to start the game.');
@@ -158,7 +157,7 @@ const startGame = () => {
   while (remainingShips > 0) {
 
     let userGuess = readlineSync.question('Enter a location to strike (or \'SHIPS\' to see remaining ships): ').toUpperCase();
-    isValid = isValidInput(userGuess);
+    isValid = isValidInput(userGuess, boardSize);
     
     //Allows users to see how many ships are remaining
     inputHandle(userGuess, isValid);
@@ -174,4 +173,4 @@ const startGame = () => {
       }
     }
 };
-startGame();
+startGame(boardSize);
